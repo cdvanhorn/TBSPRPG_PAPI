@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 
 using PublicApi.Models;
-using PublicApi.Utilities;
+using TbspRgpLib.Jwt;
 
 namespace PublicApi.Controllers {
     
@@ -16,8 +16,8 @@ namespace PublicApi.Controllers {
         private IJwtHelper _jwtHelper;
         private RestClient _client;
 
-        public UsersController(IJwtHelper jwtHelper) {
-            _jwtHelper = jwtHelper;
+        public UsersController(IJwtSettings jwtSettings) {
+            _jwtHelper = new JwtHelper(jwtSettings.Secret);
             _client = new RestClient("http://userapi:8001/api/");
         }
 

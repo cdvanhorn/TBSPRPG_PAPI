@@ -5,19 +5,14 @@ using RestSharp;
 using System;
 using System.Threading.Tasks;
 
-using PublicApi.Models;
-using PublicApi.Utilities;
-
 namespace PublicApi.Controllers {
     
     [ApiController]
     [Route("api/[controller]")]
     public class AdventuresController : ControllerBase {
-        private IJwtHelper _jwtHelper;
         private RestClient _client;
 
-        public AdventuresController(IJwtHelper jwtHelper) {
-            _jwtHelper = jwtHelper;
+        public AdventuresController() {
             _client = new RestClient("http://adventureapi:8002/api/");
         }
 

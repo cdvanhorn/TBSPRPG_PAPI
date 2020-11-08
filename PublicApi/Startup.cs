@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using PublicApi.Utilities;
+using TbspRgpLib.Jwt;
 
 namespace PublicApi
 {
@@ -31,7 +31,6 @@ namespace PublicApi
             services.AddControllers();
 
             //add settings
-            services.AddScoped<IJwtHelper, JwtHelper>();
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             services.AddSingleton<IJwtSettings>(sp =>
                 sp.GetRequiredService<IOptions<JwtSettings>>().Value);
