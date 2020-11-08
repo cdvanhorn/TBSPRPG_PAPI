@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using PublicApi.Models;
 using TbspRgpLib.Jwt;
+using TbspRgpLib.Settings;
 
 namespace PublicApi.Controllers {
     

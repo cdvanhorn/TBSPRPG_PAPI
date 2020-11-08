@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using TbspRgpLib.Jwt;
+using TbspRgpLib.Settings;
 
 namespace PublicApi
 {
