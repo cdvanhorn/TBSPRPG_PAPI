@@ -16,11 +16,9 @@ namespace PublicApi.Controllers {
     [Route("api/[controller]")]
     public class UsersController : BaseController {
         private IJwtHelper _jwtHelper;
-        private RestClient _client;
 
-        public UsersController(IJwtSettings jwtSettings) {
+        public UsersController(IJwtSettings jwtSettings) : base("http://userapi:8001/api/") {
             _jwtHelper = new JwtHelper(jwtSettings.Secret);
-            _client = new RestClient("http://userapi:8001/api/");
         }
 
         [HttpPost("authenticate")]
@@ -43,12 +41,7 @@ namespace PublicApi.Controllers {
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
-            var request = new RestRequest("users", DataFormat.Json);
-            AddJwtToken(request);
-            var response = await _client.ExecuteGetAsync(request);
-            if(!response.IsSuccessful)
-                return BadRequest( new { message = response.ErrorMessage });
-            return Ok(response.Content);
+            return await MakeGetServiceRequest("users");
         }
     }
 }
