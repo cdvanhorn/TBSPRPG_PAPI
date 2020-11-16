@@ -29,7 +29,11 @@ namespace PublicApi.Controllers {
             var response = await _client.ExecuteGetAsync(request);
             if(!response.IsSuccessful)
                 return BadRequest(new { message = response.ErrorMessage });
-            return (IActionResult)response;
+
+            if(response.StatusCode == System.Net.HttpStatusCode.Accepted)
+                return Accepted();
+            else
+                return Ok(response.Content);
         }
     }
 }
