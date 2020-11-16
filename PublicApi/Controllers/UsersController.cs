@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using RestSharp;
+using RestSharp.Authenticators;
 
 using System;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace PublicApi.Controllers {
     
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase {
+    public class UsersController : BaseController {
         private IJwtHelper _jwtHelper;
         private RestClient _client;
 
@@ -43,6 +44,7 @@ namespace PublicApi.Controllers {
         public async Task<IActionResult> GetAll()
         {
             var request = new RestRequest("users", DataFormat.Json);
+            AddJwtToken(request);
             var response = await _client.ExecuteGetAsync(request);
             if(!response.IsSuccessful)
                 return BadRequest( new { message = response.ErrorMessage });
