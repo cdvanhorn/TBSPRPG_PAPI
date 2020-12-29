@@ -12,9 +12,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using TbspRpgLib.Jwt;
-using TbspRpgLib.Settings;
-
 namespace PublicApi
 {
     public class Startup
@@ -30,11 +27,7 @@ namespace PublicApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            //add settings
-            services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
-            services.AddSingleton<IJwtSettings>(sp =>
-                sp.GetRequiredService<IOptions<JwtSettings>>().Value);
+            TbspRpgLib.LibStartup.ConfigureTbspRpgServices(Configuration, services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +42,7 @@ namespace PublicApi
 
             app.UseRouting();
 
-            app.UseMiddleware<JwtMiddleware>();
+            TbspRpgLib.LibStartup.ConfigureTbspRpg(app);
 
             //app.UseAuthorization();
 
