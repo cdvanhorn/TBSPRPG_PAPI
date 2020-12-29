@@ -7,8 +7,8 @@ using System;
 using System.Threading.Tasks;
 
 using PublicApi.Models;
-using TbspRgpLib.Jwt;
-using TbspRgpLib.Settings;
+using TbspRpgLib.Jwt;
+using TbspRpgLib.Settings;
 
 namespace PublicApi.Controllers {
     
