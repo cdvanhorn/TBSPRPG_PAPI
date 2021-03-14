@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 
-using RestSharp;
-using RestSharp.Authenticators;
+using RestSharp.Serialization.Json;
 
-using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using PublicApi.Models;
 using TbspRpgLib.Jwt;
 using TbspRpgLib.Settings;
+using TbspRpgLib.InterServiceCommunication;
 
 namespace PublicApi.Controllers {
     
@@ -16,32 +16,34 @@ namespace PublicApi.Controllers {
     [Route("api/[controller]")]
     public class UsersController : BaseController {
         private IJwtHelper _jwtHelper;
+        private IUserServiceLink _serviceLink;
 
-        public UsersController(IJwtSettings jwtSettings) : base("http://userapi:8001/api/") {
+        public UsersController(IJwtSettings jwtSettings, IUserServiceLink serviceLink) {
             _jwtHelper = new JwtHelper(jwtSettings.Secret);
+            _serviceLink = serviceLink;
         }
 
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate(AuthenticateRequest model)
         {
-            //make a request to our user microservice, we're doing this synchronouse
-            var request = new RestRequest("users/authenticate", DataFormat.Json);
-            request.AddJsonBody(model);
-            var response = await _client.ExecutePostAsync<AuthenticateResponse>(request);
-
-            if(!response.IsSuccessful)
+            var response = await _serviceLink.Authenticate(model.Username, model.Password);
+            if(!response.Response.IsSuccessful)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            response.Data.Token = _jwtHelper.GenerateToken(response.Data.Id);
+            JsonDeserializer deserial = new JsonDeserializer();
+            AuthenticateResponse aresponse = deserial.Deserialize<AuthenticateResponse>(response.Response);
+            aresponse.Token = _jwtHelper.GenerateToken(aresponse.Id);
 
-            return Ok(response.Data);
+            return Ok(aresponse);
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
-            return await MakeGetServiceRequest("users");
+            return Respond(
+                await _serviceLink.CR_GetUsers(RequestUserId, RequestToken)
+            );
         }
     }
 }

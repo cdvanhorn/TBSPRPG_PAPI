@@ -11,17 +11,17 @@ namespace PublicApi.Controllers {
     [Route("api/[controller]")]
     public class AdventuresController : BaseController {
 
-        public AdventuresController() : base("http://adventureapi:8002/api/"){ }
+        // public AdventuresController() : base("http://adventureapi:8002/api/"){ }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return await MakeGetServiceRequest("adventures", false);
-        }
+        // [HttpGet]
+        // public async Task<IActionResult> GetAll()
+        // {
+        //     return await MakeGetServiceRequest("adventures", false);
+        // }
 
-        [HttpGet("{name}")]
-        public async Task<IActionResult> GetByName(string name) {
-            return await MakeGetServiceRequest($"adventures/{name}", false);
-        }
+        // [HttpGet("{name}")]
+        // public async Task<IActionResult> GetByName(string name) {
+        //     return await MakeGetServiceRequest($"adventures/{name}", false);
+        // }
     }
 }
