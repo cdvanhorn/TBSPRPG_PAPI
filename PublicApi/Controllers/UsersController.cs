@@ -42,7 +42,7 @@ namespace PublicApi.Controllers {
         public async Task<IActionResult> GetAll()
         {
             return Respond(
-                await _serviceLink.CR_GetUsers(RequestUserId, RequestToken)
+                await _serviceLink.CR_GetUsers(CreateCredentials())
             );
         }
     }

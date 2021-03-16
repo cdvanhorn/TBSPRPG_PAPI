@@ -19,6 +19,13 @@ namespace PublicApi.Controllers {
             }
         }
 
+        protected Credentials CreateCredentials() {
+            return new Credentials() {
+                UserId = RequestUserId,
+                Token = RequestToken
+            };
+        }
+
         protected IActionResult Respond(IscResponse response) {
             if(!response.Response.IsSuccessful)
                 return BadRequest(new { message = response.Response.ErrorMessage });
